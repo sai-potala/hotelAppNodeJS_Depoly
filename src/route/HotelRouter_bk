@@ -1,0 +1,139 @@
+var express = require("express");
+var hotelRouter = express.Router();
+var mongodb = require("mongodb").MongoClient;
+var url = "mongodb://localhost:27017";
+
+function router(menu) {
+  hotelRouter.route("/").get(function (req, res) {
+    mongodb.connect(url, (err, connection) => {
+      if (err) {
+        res.status(505).send("error while connecting");
+      } else {
+        const dbo = connection.db("hoteldata");
+        dbo.collection("hoteldata").find({}).toArray((err, data) => {
+          console.log(data)
+            if (err) {
+              res.send("error while fetching data");
+            } 
+            else {
+              res.render("hotelPage", {title: "hotel details",hotelData: data,menu});
+            }
+          });
+      }
+    });
+  });
+  
+  hotelRouter.route("/details").get(function (req, res) {
+    res.send("hotel details");
+  });
+  return hotelRouter;
+}
+
+module.exports = router;
+
+
+
+
+///////////
+var express = require("express");
+var hotelRouter = express.Router();
+
+var hotel = [
+  {
+    _id: "4",
+    name: "The Ashtan Sarovar Portico",
+    city_name: "New Delhi",
+    city: "1",
+    locality: "Greenpark, New Delhi",
+    thumb: "https://i.ibb.co/TbVsznT/sarovar.jpg",
+    cost: 8399,
+    address:
+      "C2, Green park Extension, Green Park Extn, Behind Gurudwara, Nr Greenpark Metro Station, New Delhi",
+    type: [
+      { roomtype: "3", name: "Budget Room" },
+      { roomtype: "4", name: "Semi Deluxe Room" },
+      { roomtype: "1", name: "Deluxe Room" },
+    ],
+    tripType: [
+      { trip: "4", name: "Luxury" },
+      { trip: "3", name: "Travel" },
+    ],
+  },
+  {
+    _id: "9",
+    name: "Hotel Sayaji",
+    city_name: "Pune",
+    city: "3",
+    locality: "Wakad, Pune",
+    thumb: "https://i.ibb.co/6FLGh3D/Syaji.jpg",
+    cost: 3479,
+    address: "135/136, Mumbai-Bangalore Bypass Highway, Wakad, Pune",
+    type: [
+      { roomtype: "1", name: "Deluxe Room" },
+      { roomtype: "4", name: "Semi Deluxe Room" },
+      { roomtype: "2", name: "Premiere Rooms" },
+    ],
+    tripType: [
+      { trip: "1", name: "Business" },
+      { trip: "2", name: "Holiday" },
+    ],
+  },
+  {
+    _id: "16",
+    name: "JW Marriott Chandigarh",
+    city_name: "Chandigarh",
+    city: "4",
+    locality: "Dakshin Marg, Chandigarh",
+    thumb: "https://i.ibb.co/9GCkYN1/jw.jpg",
+    cost: 6599,
+    address: "Plot no 6, Sector 35-B, Dakshin Marg",
+    type: [
+      { roomtype: "1", name: "Deluxe Room" },
+      { roomtype: "3", name: "Budget Room" },
+      { roomtype: "4", name: "Semi Deluxe Room" },
+    ],
+    tripType: [
+      { trip: "4", name: "Luxury" },
+      { trip: "3", name: "Travel" },
+    ],
+  },
+  {
+    _id: "24",
+    name: "Sterling Manali",
+    city_name: "Manali",
+    city: "6",
+    locality: "Prini, Manali",
+    thumb: "https://i.ibb.co/CH83bNK/sterling.jpg",
+    cost: 6599,
+    address: "Manali-Naggar Highway, left bank road, Prini, Manali",
+    type: [
+      { roomtype: "1", name: "Deluxe Room" },
+      { roomtype: "2", name: "Premiere Rooms" },
+      { roomtype: "3", name: "Budget Room" },
+    ],
+    tripType: [
+      { trip: "4", name: "Luxury" },
+      { trip: "3", name: "Travel" },
+    ],
+  },
+];
+
+function router(menu) {
+  hotelRouter.route("/").get(function (req, res) {
+    res.render("hotelPage", {
+      title: "hotel details",
+      hotelData: hotel,
+      menu,
+    });
+    
+  });
+  hotelRouter.route("/details").get(function (req, res) {
+    res.send("hotel details");
+  });
+  return hotelRouter;
+}
+
+module.exports = router;
+
+/////////////////hotel router city .details
+ 
